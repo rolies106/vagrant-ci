@@ -1,0 +1,7 @@
+# Gems
+
+- name: gems | install gems
+  command: >
+    sudo gem install {{ item }} --no-ri --no-rdoc
+  with_items: gems_install
+  when: gems_install is defined
