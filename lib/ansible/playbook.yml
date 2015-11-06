@@ -2,6 +2,20 @@
 - name: Core
   hosts: all 
   sudo: false
+  vars:
+    applications:
+      repository:
+      -
+        name: web
+        install: 0
+        path: /vagrant/web/web
+        options:
+          provider: git
+          source: 'git@github.com:rolies106/web.git'
+          revision: master
+          pre_install: [ ]
+          post_install: [ ]
+
   roles:
 
     - role: flyinggecko.apt
@@ -26,6 +40,9 @@
         packages: 
           - ruby-dev
           - ant
+          - git
+          - libgl1-mesa-dev
+          - openjdk-7-jdk
         ssh:
           authorized_keys: [ ]
           private_keys: [ ]
@@ -49,4 +66,12 @@
         - grunt
         - grunt-cli
 
-    - role: groover.maven
+    - role: roles/groover.maven
+      maven_version: 3.3.3
+
+    - role: repository
+      when: "applications.repository is defined"
+
+    - role: nickp666.android-sdk
+      android_sdk_download_location: http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
+
