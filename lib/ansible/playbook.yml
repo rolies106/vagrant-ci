@@ -1,0 +1,36 @@
+---
+- name: Core
+  hosts: all 
+  sudo: true
+  roles:
+
+    - role: flyinggecko.apt
+      apt_source_all:
+        - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty main restricted universe multiverse"
+        - source: "deb-src http://kambing.ui.ac.id/ubuntu/ trusty main restricted universe multiverse"
+        - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty-updates main restricted universe multiverse"
+        - source: "deb-src http://kambing.ui.ac.id/ubuntu/ trusty-updates main restricted universe multiverse"
+        - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty-security main restricted universe multiverse"
+        - source: "deb-src http://kambing.ui.ac.id/ubuntu/ trusty-security main restricted universe multiverse"
+        - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty-backports main restricted universe multiverse"
+        - source: "deb-src http://kambing.ui.ac.id/ubuntu/ trusty-backports main restricted universe multiverse"
+        - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty-proposed main restricted universe multiverse"
+        - source: "deb-src http://kambing.ui.ac.id/ubuntu/ trusty-proposed main restricted universe multiverse"
+        - source: "deb http://extras.ubuntu.com/ubuntu trusty main"
+        - source: "deb-src http://extras.ubuntu.com/ubuntu trusty main"
+
+    - role: server
+      server:
+        packages: [ ]
+        ssh:
+          authorized_keys: [ ]
+          private_keys: [ ]
+          config: [ ]
+        dotfiles:
+          install: 0
+          repo: ''
+          files: [ ]
+          bash_aliases: null
+
+    - role: altermn.rvm
+      rvm_default_ruby_version: ruby-2.1.1
