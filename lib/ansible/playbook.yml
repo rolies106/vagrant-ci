@@ -73,5 +73,9 @@
       when: "applications.repository is defined"
 
     - role: nickp666.android-sdk
+      sudo: true
       android_sdk_download_location: http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 
+    - role: geerlingguy.jenkins
+      sudo: true
+      jenkins_hostname: 0.0.0.0
