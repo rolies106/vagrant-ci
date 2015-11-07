@@ -4,6 +4,7 @@
 
 This is CI box using vagrant and ansible, it could be run as CI server on your local machine. This box contain :
 
+* Ubuntu 14.04
 * Ruby
 * Apache Ant
 * Apache Maven
