@@ -80,6 +80,10 @@
     - role: geerlingguy.jenkins
       sudo: true
       jenkins_hostname: 0.0.0.0
+      jenkins_plugins:
+        - git
+        - sonar
+        - ssh
 
     - role: mariadb
       sudo: true
