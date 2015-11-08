@@ -1,0 +1,149 @@
+# {{ ansible_managed }}
+{% if item.redirection is defined %}
+server {
+    listen {{ item.redirection.listen_port|default('80') }};
+    server_name {{ item.redirection.server_name }};
+    return {{ item.redirection.return }};
+}
+{% endif %}
+
+{% if item.proxy_cache_path is defined %}
+    proxy_cache_path {{ item.proxy_cache_path }};
+{% endif %}
+
+{% if item.static_location is defined %}
+    {% if item.static_location.host is defined %}
+        upstream staticfrontend {
+            server {{ item.static_location.host }}:{{ item.static_location.port|default(8888) }};
+        }
+    {% endif %}
+{% endif %}
+
+server {
+        listen {{ item.listen_port|default('80') }};
+        #listen [::]:{{ item.listen_port|default('80') }} ipv6only=on default_server;
+        server_name {{ item.server_name }}{% if item.server_aliases %}{% for alias in item.server_aliases %} {{ alias }}{% endfor %}{% endif %};
+        root '{{ item.www_root }}';
+        client_max_body_size 64M;
+
+        {% if item.static_location is defined %}
+            location = /favicon.ico {
+                rewrite (.*) /favicon.ico;
+            }
+
+            location / {
+                include proxy_params;
+                proxy_pass http://staticfrontend;
+                proxy_cache IMAGE;
+                proxy_cache_valid 1d;
+                add_header X-Proxy-Cache $upstream_cache_status;
+            }
+        {% else %}
+            # Deny access to any files with a .php extension in the uploads directory
+            location ~* /(?:uploads|files)/.*\.php$ {
+                    deny all;
+            }
+
+            {% if item.locations is defined %}
+                {% for location in item.locations %}
+                    location {{ location.url }} {
+                        {% for value in location.rules %}
+                            {% if value.proxy_pass is defined %}
+                                proxy_pass {{ value.proxy_pass }};
+                            {% endif %}
+                            {% if value.include is defined %}
+                                include {{ value.include }};
+                            {% endif %}
+                        {% endfor %}
+                    }
+                {% endfor %}
+            {% else %}
+                location / {
+                        index index.php index.html index.htm;
+                        expires -1;
+                        try_files {{ item.try_files|default('$uri $uri/ /index.php?$args') }};
+                }
+
+                location ~* \.(img|flv|swf|download|gif|jpg|jpeg|png|css|js)$ {
+                        expires -1;
+                        root '{{ item.www_root }}';
+                }
+
+                location ~ \.php$ {
+                        expires -1;
+                        try_files $uri =404;
+                        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+                        {% if hhvm is defined and hhvm.install == 1 %}
+                        fastcgi_pass 127.0.0.1:9000;
+                        {% else %}
+                        fastcgi_pass unix:/var/run/php5-fpm.sock;
+                        {% endif %}
+
+                        fastcgi_index index.php;
+
+                        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+                        {% if item.envvars is defined %}{% for env in item.envvars %}
+                        fastcgi_param {{ env }};
+                        {% endfor %}{% endif %}
+
+                        include fastcgi_params;
+                }
+            {% endif %}
+        {% endif %}
+
+        location ~ /\.ht {
+            deny all;
+        }
+}
+
+{% if item.ssl is defined and item.ssl == 1 %}
+server {
+        listen {{ item.ssl_listen_port|default('443') }};
+        #listen [::]:{{ item.ssl_listen_port|default('443') }} ipv6only=on default_server;
+        server_name {{ item.server_name }}{% if item.server_aliases %}{% for alias in item.server_aliases %} {{ alias }}{% endfor %}{% endif %};
+        root {{ item.www_root }};
+
+        client_max_body_size 64M;
+
+        # Deny access to any files with a .php extension in the uploads directory
+        location ~* /(?:uploads|files)/.*\.php$ {
+                deny all;
+        }
+
+        location / {
+                index index.php index.html index.htm;
+                try_files $uri $uri/ /index.php?$args;
+        }
+
+        location ~* \.(gif|jpg|jpeg|png|css|js)$ {
+                expires -1;
+        }
+
+        location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+                {% if hhvm is defined and hhvm.install == 1 %}
+                fastcgi_pass 127.0.0.1:9000;
+                {% else %}
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+                {% endif %}
+
+                fastcgi_index index.php;
+
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+                {% if item.envvars is defined %}{% for env in item.envvars %}
+                fastcgi_param {{ env }};
+                {% endfor %}{% endif %}
+
+                include fastcgi_params;
+        }
+
+        ssl on;
+        ssl_certificate {{ item.ssl_cert|default('/etc/nginx/ssl/server.crt') }};
+        ssl_certificate_key {{ item.ssl_key|default('/etc/nginx/ssl/server.key') }};
+}
+{% endif %}

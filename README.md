@@ -5,6 +5,8 @@
 This is CI box using vagrant and ansible, it could be run as CI server on your local machine. This box contain :
 
 * Ubuntu 14.04
+* PHP
+* Mailcathcer
 * Ruby
 * Apache Ant
 * Apache Maven
@@ -33,7 +35,15 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 1. Clone the repository on your local machine.
 2. Go to `/path/of/your/vagrant-ci` with terminal or console.
 3. Run `vagrant up` inside that folder and wait until vagrant configuration is completed.
-4. Add `192.168.56.10  vagrant-ci.dev` to your `/etc/hosts` file.
+4. Add this to your `/etc/hosts` file :
+
+```
+    192.168.56.10  vagrant-ci.dev jenkins.vagrant-ci.dev mail.vagrant-ci.dev
+```
+
+## Application
+
+* Jenkins web could be accessed from http://vagrant-ci.dev:8080.
 
 ## License
 

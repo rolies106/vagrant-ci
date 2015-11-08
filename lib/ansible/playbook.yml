@@ -1,5 +1,5 @@
 ---
-- name: Core
+- name: VagrantCI
   hosts: all 
   sudo: false
   vars:
@@ -79,3 +79,61 @@
     - role: geerlingguy.jenkins
       sudo: true
       jenkins_hostname: 0.0.0.0
+
+    - role: nginx
+      nginx:
+        install: 1
+        mpm_module: fpm
+        vhosts:
+          -
+            name: jenkins
+            server_name: jenkins.vagrant-ci.dev
+            server_aliases: [ ]
+            www_root: /vagrant/web/protobox
+            listen_port: 80
+            locations:
+              -
+                url: '/'
+                rules:
+                  - proxy_pass: http://127.0.0.1:8080
+          -
+            name: mailcatcher
+            server_name: mail.vagrant-ci.dev
+            server_aliases: [ ]
+            www_root: /vagrant/web/protobox
+            listen_port: 80
+            locations:
+              -
+                url: '/'
+                rules:
+                  - proxy_pass: http://127.0.0.1:1080
+
+    - role: php
+      sudo: true
+      php:
+        install: 0
+        version: '56'
+        modules:
+          - php5-cli
+          - php5-curl
+          - php5-gd
+          - php5-intl
+          - php5-mcrypt
+          - php5-imagick
+          - php5-redis
+        pear:
+          install: 1
+          modules: [ ]
+        pecl:
+          install: 1
+          modules: [ ]
+        composer:
+          install: 1
+        mailcatcher:
+          install: 1
+        ini:
+          display_errors: On
+          display_startup_errors: On
+          error_reporting: '-1'
+          short_open_tag: On
+        timezone: UTC
