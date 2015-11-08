@@ -17,7 +17,6 @@
           post_install: [ ]
 
   roles:
-
     - role: flyinggecko.apt
       sudo: true
       apt_source_all:
@@ -134,7 +133,7 @@
     - role: php
       sudo: true
       php:
-        install: 0
+        install: 1
         version: '56'
         modules:
           - php5-cli
