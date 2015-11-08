@@ -73,12 +73,30 @@
       when: "applications.repository is defined"
 
     - role: nickp666.android-sdk
+      install: 0
       sudo: true
       android_sdk_download_location: http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 
     - role: geerlingguy.jenkins
       sudo: true
       jenkins_hostname: 0.0.0.0
+
+    - role: mariadb
+      sudo: true
+      mariadb:
+        install: 1
+        version: '10.1'
+        bind_network: '0.0.0.0'
+        root_password: root
+        databases:
+          -
+            name: vagrantci
+            host: '127.0.0.1'
+            user: root
+            password: root
+            grant:
+              - 'ALL'
+            sql_file: ''
 
     - role: nginx
       sudo: true
@@ -90,7 +108,7 @@
             name: jenkins
             server_name: jenkins.vagrant-ci.dev
             server_aliases: [ ]
-            www_root: /vagrant/web/protobox
+            www_root: /vagrant/web
             listen_port: 80
             locations:
               -
@@ -101,7 +119,7 @@
             name: mailcatcher
             server_name: mail.vagrant-ci.dev
             server_aliases: [ ]
-            www_root: /vagrant/web/protobox
+            www_root: /vagrant/web
             listen_port: 80
             locations:
               -

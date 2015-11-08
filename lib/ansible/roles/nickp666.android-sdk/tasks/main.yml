@@ -1,5 +1,10 @@
 ---
 # tasks file for android-sdk
 - include: dependencies.yml
+  when: install is defined and install == 1
+
 - include: sdktools.yml
+  when: install is defined and install == 1
+
 - include: sdksinstall.yml
+  when: install is defined and install == 1

@@ -7,6 +7,7 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 * Ubuntu 14.04
 * PHP
 * nGinx
+* MariaDB
 * Mailcathcer
 * Ruby
 * Apache Ant
@@ -46,6 +47,7 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 
 * Jenkins web could be accessed from http://jenkins.vagrant-ci.dev.
 * Mailcatcher web could be accessed from http://mail.vagrant-ci.dev.
+* MariaDB could be accessed using ssh to vagrant box using `vagrant` as both of username and password, and give `root` for both of username and passwotd to mariadb.
 
 ## License
 

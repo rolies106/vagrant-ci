@@ -1,7 +1,13 @@
 # Gems
 
+- name: gems | check installed gems
+  command: >
+    sudo gem list
+  register: installed_gem_list
+  ignore_errors: yes
+
 - name: gems | install gems
   command: >
     sudo gem install {{ item }} --no-ri --no-rdoc
   with_items: gems_install
-  when: gems_install is defined
+  when: gems_install is defined and installed_gem_list.stdout.find("{{ item }}") == -1
