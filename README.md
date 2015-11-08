@@ -43,6 +43,8 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
     192.168.56.10  vagrant-ci.dev jenkins.vagrant-ci.dev mail.vagrant-ci.dev
 ```
 
+5. When ther is an update in configuration or inside playbook, just run `vagrant provision`.
+
 ## Application
 
 * Jenkins web could be accessed from http://jenkins.vagrant-ci.dev.
