@@ -81,6 +81,7 @@
       jenkins_hostname: 0.0.0.0
 
     - role: nginx
+      sudo: true
       nginx:
         install: 1
         mpm_module: fpm

@@ -6,6 +6,7 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 
 * Ubuntu 14.04
 * PHP
+* nGinx
 * Mailcathcer
 * Ruby
 * Apache Ant
@@ -43,7 +44,8 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 
 ## Application
 
-* Jenkins web could be accessed from http://vagrant-ci.dev:8080.
+* Jenkins web could be accessed from http://jenkins.vagrant-ci.dev.
+* Mailcatcher web could be accessed from http://mail.vagrant-ci.dev.
 
 ## License
 
