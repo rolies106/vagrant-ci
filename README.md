@@ -34,16 +34,16 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 
 ## Installation
 
-1. Clone the repository on your local machine.
-2. Go to `/path/of/your/vagrant-ci` with terminal or console.
-3. Run `vagrant up` inside that folder and wait until vagrant configuration is completed.
-4. Add this to your `/etc/hosts` file :
+- Clone the repository on your local machine.
+- Go to `/path/of/your/vagrant-ci` with terminal or console.
+- Run `vagrant up` inside that folder and wait until vagrant configuration is completed.
+- Add this to your `/etc/hosts` file :
 
 ```
     192.168.56.10  vagrant-ci.dev jenkins.vagrant-ci.dev mail.vagrant-ci.dev
 ```
 
-5. When ther is an update in configuration or inside playbook, just run `vagrant provision`.
+- When ther is an update in configuration or inside playbook, just run `vagrant provision`.
 
 ## Application
 
