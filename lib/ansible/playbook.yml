@@ -17,7 +17,7 @@
           post_install: [ ]
 
   roles:
-    - role: flyinggecko.apt
+    - role: apt
       sudo: true
       apt_source_all:
         - source: "deb http://kambing.ui.ac.id/ubuntu/ trusty main restricted universe multiverse"
@@ -52,31 +52,31 @@
           files: [ ]
           bash_aliases: null
 
-    - role: altermn.rvm
+    - role: rvm
       rvm_default_ruby_version: ruby-2.1.1
       gems_install:
         - 'appium_console'
         - 'flaky'
 
-    - role: Stouts.nodejs
+    - role: nodejs
       sudo: true
       nodejs_enabled: true
       nodejs_npm_modules:
         - grunt
         - grunt-cli
 
-    - role: roles/groover.maven
+    - role: maven
       maven_version: 3.3.3
 
     - role: repository
       when: "applications.repository is defined"
 
-    - role: nickp666.android-sdk
+    - role: android-sdk
       install: 0
       sudo: true
       android_sdk_download_location: http://dl.google.com/android/android-sdk_r24.4.1-linux.tgz
 
-    - role: geerlingguy.jenkins
+    - role: jenkins
       sudo: true
       jenkins_hostname: 0.0.0.0
       jenkins_plugins:
@@ -159,3 +159,7 @@
           error_reporting: '-1'
           short_open_tag: On
         timezone: UTC
+
+    - role: selenium
+      sudo: true
+      selenium_version: 2.44.0

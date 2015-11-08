@@ -14,6 +14,7 @@ This is CI box using vagrant and ansible, it could be run as CI server on your l
 * Apache Maven
 * NodeJS
 * Jenkins
+* Selenium server
 
 ### Sofware
 
