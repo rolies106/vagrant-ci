@@ -19,4 +19,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "ansible" do |ansible|
       ansible.playbook = "lib/ansible/playbook.yml"
   end
+
+  # Finishing provisioner
+  config.vm.provision :shell, privileged: false, :inline => <<-PREPARE
+    /bin/cat /vagrant/lib/shell/logo.txt
+  PREPARE
+
 end
